@@ -5,7 +5,7 @@
   // ➕ Add New User
   document.getElementById('addBtn').addEventListener('click', async () => {
     const name = document.getElementById('username').value;
-    const res = await fetch('${BASE_URL}/users'{
+    const res = await fetch('${BASE_URL}/users',{
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name })
@@ -34,7 +34,7 @@
   document.getElementById('updateBtn').addEventListener('click', async () => {
     const oldName = prompt('Enter current name:');
     const newName = prompt('Enter new name:');
-    const res = await fetch('${BASE_URL}/users' {
+    const res = await fetch('${BASE_URL}/users', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ oldName, newName })
