@@ -2,15 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { MongoClient } = require("mongodb");
-require("dotenv").config(); // ✅ Load MONGO_URI
+require("dotenv").config(); // Load .env for Mongo URI
 
 const app = express();
 const port = process.env.PORT || 8080;
 
-// ✅ Use MongoDB Atlas instead of localhost
-const url = process.env.MONGO_URI; 
+// ✅ Use MongoDB Atlas URL from environment
+const url = process.env.MONGO_URI;
 const dbName = "people";
-
 let myDB;
 
 // Middleware
@@ -18,7 +17,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // ✅ Connect to MongoDB Atlas
-MongoClient.connect(url)
+MongoClient.connect(url, { useUnifiedTopology: true })
   .then((client) => {
     console.log("✅ Connected to MongoDB Atlas");
     myDB = client.db(dbName).collection("friends");
@@ -28,7 +27,7 @@ MongoClient.connect(url)
 // ➕ Add new user
 app.post("/users", (req, res) => {
   myDB.insertOne(req.body)
-    .then(() => res.json({ message: "User added successfully" }))
+    .then(() => res.json({ message: "User added successfully ✅" }))
     .catch(err => res.status(500).json({ error: err }));
 });
 
@@ -43,7 +42,7 @@ app.get("/users", (req, res) => {
 app.put("/users", (req, res) => {
   const { oldName, newName } = req.body;
   myDB.updateOne({ name: oldName }, { $set: { name: newName } })
-    .then(() => res.json({ message: "User updated successfully" }))
+    .then(() => res.json({ message: "User updated successfully ✏" }))
     .catch(err => res.status(500).json({ error: err }));
 });
 
@@ -51,16 +50,16 @@ app.put("/users", (req, res) => {
 app.delete("/users/:name", (req, res) => {
   const name = req.params.name;
   myDB.deleteOne({ name })
-    .then(() => res.json({ message: "User deleted successfully" }))
+    .then(() => res.json({ message: "User deleted ✅" }))
     .catch(err => res.status(500).json({ error: err }));
 });
 
-// Serve frontend
+// Serve the UI
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Start Server
 app.listen(port, () => {
-  console.log("🚀 Server running at http://localhost:${port}");
+  console.log(🚀 Server running on port ${port});
 });
