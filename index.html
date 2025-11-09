@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello Mongo</title>
+</head>
+<body>
+  <h1>Hello Mongo</h1>
+
+  <!-- Input to add user -->
+  <input type="text" id="name" placeholder="Enter name">
+  <button onclick="addUser()">Add User</button>
+
+  <h2>User List</h2>
+  <button onclick="getUsers()">Load Users</button>
+  <ul id="usersList"></ul>
+
+  <script>
+    // Add user to DB
+    function addUser() {
+      const name = document.getElementById("name").value;
+
+      fetch("/addUser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data); // Shows {status:true, message:"User added successfully!"}
+        alert(data.message);
+      });
+    }
+
+    // Get users from DB
+    function getUsers() {
+      fetch("/getUsers")
+        .then(res => res.json())
+        .then(users => {
+          console.log(users); // Output in console like in your screenshot
+          const list = document.getElementById("usersList");
+          list.innerHTML = "";
+          users.forEach(u => {
+            const li = document.createElement("li");
+            li.textContent = `${u._id} - ${u.name}`;
+            list.appendChild(li);
+          });
+        });
+    }
+  </script>
+</body>
+</html>
