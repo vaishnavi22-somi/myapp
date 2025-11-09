@@ -1,115 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Mongo Tester</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 40px;
-      background-color: #fafafa;
-    }
-    h1 {
-      color: #333;
-    }
-    input {
-      padding: 8px;
-      margin: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    button {
-      padding: 8px 15px;
-      margin: 5px;
-      border: none;
-      background-color: #ddd;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #bbb;
-    }
-    #output {
-      margin-top: 20px;
-      background-color: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      width: 50%;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      text-align: left;
-    }
-  </style>
-</head>
-<body>
-  <h1>Hello Mongo</h1>
+<script>
+  const BASE_URL = "https://myapp-wjxf.onrender.com"; // your live server URL
+  const output = document.getElementById('output');
 
-  <div>
-    <input type="text" id="username" placeholder="Enter user name">
-  </div>
-
-  <div>
-    <button id="addBtn">Add New User</button>
-    <button id="findBtn">Find Match</button>
-    <button id="listBtn">List Data</button>
-    <button id="updateBtn">Update</button>
-    <button id="deleteBtn">Delete</button>
-  </div>
-
-  <div id="output"></div>
-
-  <script>
-    const output = document.getElementById('output');
-
-    // ➕ Add New User
-    document.getElementById('addBtn').addEventListener('click', async () => {
-      const name = document.getElementById('username').value;
-      const res = await fetch('/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name })
-      });
-      const data = await res.json();
-      output.innerHTML = `<p>${data.message}</p>`;
+  // ➕ Add New User
+  document.getElementById('addBtn').addEventListener('click', async () => {
+    const name = document.getElementById('username').value;
+    const res = await fetch(${BASE_URL}/users, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name })
     });
+    const data = await res.json();
+    output.innerHTML = <p>${data.message}</p>;
+  });
 
-    // 📋 List Users
-    document.getElementById('listBtn').addEventListener('click', async () => {
-      const res = await fetch('/users');
-      const users = await res.json();
-      output.innerHTML = '<h3>All Users:</h3>' + users.map(u => `<li>${u.name}</li>`).join('');
-    });
+  // 📋 List Users
+  document.getElementById('listBtn').addEventListener('click', async () => {
+    const res = await fetch(${BASE_URL}/users);
+    const users = await res.json();
+    output.innerHTML = '<h3>All Users:</h3>' + users.map(u => <li>${u.name}</li>).join('');
+  });
 
-    // 🔍 Find Match (by name)
-    document.getElementById('findBtn').addEventListener('click', async () => {
-      const name = document.getElementById('username').value;
-      const res = await fetch('/users');
-      const users = await res.json();
-      const match = users.find(u => u.name.toLowerCase() === name.toLowerCase());
-      output.innerHTML = match ? `<p>✅ Found: ${match.name}</p>` : `<p>❌ No match found.</p>`;
-    });
+  // 🔍 Find Match
+  document.getElementById('findBtn').addEventListener('click', async () => {
+    const name = document.getElementById('username').value;
+    const res = await fetch(${BASE_URL}/users);
+    const users = await res.json();
+    const match = users.find(u => u.name.toLowerCase() === name.toLowerCase());
+    output.innerHTML = match ? <p>✅ Found: ${match.name}</p> : <p>❌ No match found.</p>;
+  });
 
-    // ✏️ Update User
-    document.getElementById('updateBtn').addEventListener('click', async () => {
-      const oldName = prompt('Enter current name:');
-      const newName = prompt('Enter new name:');
-      const res = await fetch('/users', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ oldName, newName })
-      });
-      const data = await res.json();
-      output.innerHTML = `<p>${data.message}</p>`;
+  // ✏ Update
+  document.getElementById('updateBtn').addEventListener('click', async () => {
+    const oldName = prompt('Enter current name:');
+    const newName = prompt('Enter new name:');
+    const res = await fetch(${BASE_URL}/users, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ oldName, newName })
     });
+    const data = await res.json();
+    output.innerHTML = <p>${data.message}</p>;
+  });
 
-    // 🗑️ Delete User
-    document.getElementById('deleteBtn').addEventListener('click', async () => {
-      const name = document.getElementById('username').value;
-      const res = await fetch(`/users/${name}`, { method: 'DELETE' });
-      const data = await res.json();
-      output.innerHTML = `<p>${data.message}</p>`;
-    });
-  </script>
-</body>
-</html>
+  //
