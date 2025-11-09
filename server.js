@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const { MongoClient } = require("mongodb");
@@ -7,7 +8,10 @@ const app = express();
 const port = 8080;
 
 // MongoDB URL (you can also import from secret.js if you prefer)
-const url = "mongodb://127.0.0.1:27017";
+//const url = "mongodb://127.0.0.1:27017";
+mongoose.connect(uri)
+.then(()=>console.log("Connected to MongoDB Atlas"))
+.catch(err=>console.log("MongoDB Connection Error:",err));
 const dbName = "people";
 let myDB;
 
